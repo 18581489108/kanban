@@ -1,26 +1,27 @@
-var live2dData = {
-    moc: {
-        key: "moc",
-        path: "./assets/hiyori/hiyori.moc3"
-    },
-    textures: [
-        {
-            key: "texture",
-            path: "./assets/hiyori/hiyori.2048/texture_00.png"
+var kanban;
+(function (kanban) {
+    var KeyPath = (function () {
+        function KeyPath(key, path) {
+            this.key = key;
+            this.path = path;
         }
-    ],
-    physics: {
-        key: "physics",
-        path: "./assets/hiyori/hiyori.physics3.json"
-    },
-    motions: [
-        {
-            key: "hiyori_m01",
-            path: "./assets/hiyori/motions/hiyori_m01.motion3.json"
-        },
-        {
-            key: "hiyori_m02",
-            path: "./assets/hiyori/motions/hiyori_m02.motion3.json"
+        return KeyPath;
+    }());
+    kanban.KeyPath = KeyPath;
+    var Live2dData = (function () {
+        function Live2dData() {
         }
-    ]
-};
+        return Live2dData;
+    }());
+    kanban.Live2dData = Live2dData;
+    kanban.live2dData = new Live2dData();
+    kanban.live2dData.moc = new KeyPath("moc", "./assets/hiyori/hiyori.moc3");
+    kanban.live2dData.textures = [
+        new KeyPath("texture", "./assets/hiyori/hiyori.2048/texture_00.png")
+    ];
+    kanban.live2dData.physics = new KeyPath("physics", "./assets/hiyori/hiyori.physics3.json");
+    kanban.live2dData.motions = [
+        new KeyPath("hiyori_m01", "./assets/hiyori/motions/hiyori_m01.motion3.json"),
+        new KeyPath("hiyori_m02", "./assets/hiyori/motions/hiyori_m02.motion3.json"),
+    ];
+})(kanban || (kanban = {}));
