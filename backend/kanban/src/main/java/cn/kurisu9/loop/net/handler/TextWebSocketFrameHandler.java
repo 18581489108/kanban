@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 处理文字类的websocket消息
  * @date 2018/9/1 16:56
  **/

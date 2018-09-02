@@ -1,7 +1,7 @@
 package cn.kurisu9.loop.manager;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description session异常的原因
  * @date 2018/9/1 17:10
  **/

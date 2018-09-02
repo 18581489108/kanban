@@ -1,7 +1,7 @@
 package cn.kurisu9.loop.entity;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description session的状态
  * @date 2018/9/1 17:12
  **/

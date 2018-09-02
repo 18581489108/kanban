@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 连接的相关会话
  * @date 2018/9/1 17:00
  **/

@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by zhaoxin_m on 2018/9/1.
+ * Created by kurisu9 on 2018/9/1.
  */
 public class NettyServer {
 
@@ -98,6 +98,10 @@ public class NettyServer {
 
     public int getPort() {
         return port;
+    }
+
+    public void setNettyStatus(NettyStatusEnum nettyStatus) {
+        this.nettyStatus = nettyStatus;
     }
 
     public NettyStatusEnum getNettyStatus() {
