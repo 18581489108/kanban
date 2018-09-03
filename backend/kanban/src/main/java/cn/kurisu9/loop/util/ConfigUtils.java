@@ -26,6 +26,11 @@ public class ConfigUtils {
     public static final int WORKER_PROCESSOR_TICK_MS = 10;
 
     /**
+     * 事件线程数
+     * */
+    public static final int EVENT_THREAD_COUNT = 2;
+
+    /**
      * 环境变量名称（配置文件目录）
      */
     private static final String CONFIG_PATH = "config.path";

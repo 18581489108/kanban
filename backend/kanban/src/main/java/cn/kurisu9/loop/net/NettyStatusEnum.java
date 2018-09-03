@@ -22,7 +22,7 @@ public enum NettyStatusEnum {
     /**
      * 关闭
      * */
-    STOPED,
+    STOPPED,
 
     ;
 }

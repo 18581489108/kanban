@@ -111,7 +111,7 @@ public class ProcessorPool {
     /**
      * 通过id获取指定的逻辑线程
      * */
-    public AbstractProcessor getProcesserById(int processorId) {
+    public AbstractProcessor getProcessorById(int processorId) {
         return processorMap.get(processorId);
     }
 
@@ -122,7 +122,7 @@ public class ProcessorPool {
      * @return
      */
     public boolean sendProcessorMessage(int processorId, AbstractProcessorMessage message) {
-        AbstractProcessor processor = getProcesserById(processorId);
+        AbstractProcessor processor = getProcessorById(processorId);
         if (processor == null) {
             LOGGER.warn("processorId: {} nod found, thread message class: {}", processorId, message.getClass().getName());
             return false;

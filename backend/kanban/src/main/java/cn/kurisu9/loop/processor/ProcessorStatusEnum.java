@@ -20,7 +20,7 @@ public enum ProcessorStatusEnum {
     /**
      * 停止
      * */
-    STOP,
+    STOPPED,
 
     ;
 }

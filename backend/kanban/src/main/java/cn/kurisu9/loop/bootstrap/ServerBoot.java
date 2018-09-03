@@ -5,7 +5,6 @@ import cn.kurisu9.loop.util.ConfigUtils;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
@@ -36,17 +35,13 @@ public class ServerBoot {
                 return;
             }
 
-
-        MainProcessor mainProcessor = new MainProcessor();
-        ProcessorPool.getInstance().run(mainProcessor, ConfigUtils.MAIN_PROCESSOR_TICK_MS);
+            MainProcessor mainProcessor = new MainProcessor();
+            ProcessorPool.getInstance().run(mainProcessor, ConfigUtils.MAIN_PROCESSOR_TICK_MS);
 
         }
 
-
-        while (true)
-        {
-            try
-            {
+        while (true) {
+            try {
                 mutex.await();
 
                 LOGGER.info("开始关闭服务器");
@@ -75,8 +70,8 @@ public class ServerBoot {
                                     if (processor instanceof WorkerProcessor) {
                                         ((WorkerProcessor) processor).shutdown();
                                     }
-                                    processor.setStatus(ProcessorStatusEnum.STOP);
-                                    LOGGER.info("processor finish close,name = {}",processor.getProcessorName());
+                                    processor.setStatus(ProcessorStatusEnum.STOPPED);
+                                    LOGGER.info("processor finish close,name = {}", processor.getProcessorName());
                                 }
                         ));
 
@@ -87,12 +82,18 @@ public class ServerBoot {
 
                 break;
             }
-            catch (InterruptedException e)
-            {
+            catch (InterruptedException e) {
                 LOGGER.error(e.getMessage(), e);
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 关闭服务器
+     * */
+    public static void shutdown() {
+        mutex.countDown();
     }
 }
 

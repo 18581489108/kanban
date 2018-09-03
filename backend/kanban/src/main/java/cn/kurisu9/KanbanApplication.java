@@ -7,6 +7,8 @@ import cn.kurisu9.loop.util.ConfigUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Scanner;
+
 @SpringBootApplication
 public class KanbanApplication {
 

@@ -1,6 +1,5 @@
 package cn.kurisu9.loop.processor;
 
-import cn.kurisu9.loop.bootstrap.ServerBoot;
 import cn.kurisu9.loop.bootstrap.ServerStatusEnum;
 import cn.kurisu9.loop.entity.NetConfig;
 import cn.kurisu9.loop.net.NettyServer;
@@ -30,6 +29,11 @@ public class MainProcessor extends AbstractProcessor {
      * */
     private NettyServer nettyServer;
 
+    /**
+     * 工作线程
+     * */
+    private WorkerProcessor workerProcessor;
+
     public MainProcessor() {
         setProcessorType(ProcessorTypeEnum.MAIN);
     }
@@ -56,10 +60,10 @@ public class MainProcessor extends AbstractProcessor {
         nettyServer.boot();
 
 
-        WorkerProcessor workerProcessor = new WorkerProcessor();
+        workerProcessor = new WorkerProcessor();
         ProcessorPool.getInstance().run(workerProcessor, ConfigUtils.WORKER_PROCESSOR_TICK_MS);
 
-        serverStatus = ServerStatusEnum.RUNNING;
+        //serverStatus = ServerStatusEnum.RUNNING;
         return true;
     }
 
@@ -68,13 +72,13 @@ public class MainProcessor extends AbstractProcessor {
      * */
     private void tickServerStatus() {
         if (ServerStatusEnum.STOPPED.equals(serverStatus)) {
-            ServerBoot.mutex.countDown();
+            //ServerBoot.mutex.countDown();
             return;
         }
 
         if (ServerStatusEnum.SHUTTING_DOWN.equals(serverStatus)) {
-            // 准备关闭nettyServer
-            nettyServer.setNettyStatus(NettyStatusEnum.SHUTTING_DOWN);
+            // 关闭nettyServer
+            stopNettyServer();
 
             serverStatus = ServerStatusEnum.STOPPED;
         }
@@ -88,17 +92,24 @@ public class MainProcessor extends AbstractProcessor {
             case INIT:
                 if (channelFuture.channel().isWritable()) {
                     nettyServer.setNettyStatus(NettyStatusEnum.RUNNING);
-                    LOGGER.info("----------server listening, ip:{}, port:{}----------", nettyServer.getHost(), nettyServer.getPort());
+                    LOGGER.info("----------netty server listening, ip:{}, port:{}----------", nettyServer.getHost(), nettyServer.getPort());
                 }
                 break;
             case SHUTTING_DOWN:
-                LOGGER.info("----------shutdown server, ip:{}, port:{}----------", nettyServer.getHost(), nettyServer.getPort());
-                nettyServer.stop();
-                nettyServer.setNettyStatus(NettyStatusEnum.STOPED);
+                stopNettyServer();
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 关闭nettyServer
+     * */
+    private void stopNettyServer() {
+        LOGGER.info("----------shutdown netty server, ip:{}, port:{}----------", nettyServer.getHost(), nettyServer.getPort());
+        nettyServer.stop();
+        nettyServer.setNettyStatus(NettyStatusEnum.STOPPED);
     }
 
     public ServerStatusEnum getServerStatus() {

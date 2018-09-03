@@ -53,12 +53,12 @@ public abstract class AbstractProcessor implements Runnable {
      *
      * @param intervalTime 间隔时间，单位毫秒
      * */
-    public abstract void tick(int intervalTime);
+    protected abstract void tick(int intervalTime);
 
     /**
      * 由子类来实现初始化函数
      * */
-    public abstract boolean init();
+    protected abstract boolean init();
 
     /**
      * 处理线程间的消息
@@ -131,7 +131,7 @@ public abstract class AbstractProcessor implements Runnable {
                     }
 
                     break;
-                case STOP:
+                case STOPPED:
                     LOGGER.info("processor {} status was stopped", processorName);
                     break loop;
                 default:

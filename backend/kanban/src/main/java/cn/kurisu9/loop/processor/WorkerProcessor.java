@@ -1,5 +1,8 @@
 package cn.kurisu9.loop.processor;
 
+import cn.kurisu9.loop.event.AbstractEvent;
+import cn.kurisu9.loop.event.EventEngine;
+import cn.kurisu9.loop.util.ConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +21,10 @@ public class WorkerProcessor extends AbstractProcessor {
      * */
     private AtomicBoolean idle = new AtomicBoolean(true);
 
+    /**
+     * 异步事件引擎
+     * */
+    private EventEngine eventEngine;
 
     public WorkerProcessor() {
         setProcessorType(ProcessorTypeEnum.WORKER);
@@ -30,7 +37,9 @@ public class WorkerProcessor extends AbstractProcessor {
      */
     @Override
     public void tick(int intervalTime) {
+        eventEngine.tick(intervalTime);
 
+        idle.set(eventEngine.idle());
     }
 
     /**
@@ -38,14 +47,23 @@ public class WorkerProcessor extends AbstractProcessor {
      */
     @Override
     public boolean init() {
+        eventEngine = new EventEngine(ConfigUtils.EVENT_THREAD_COUNT);
+
         return true;
+    }
+
+    /**
+     * 添加事件
+     * */
+    public void addEvent(AbstractEvent event) {
+        eventEngine.addEvent(event);
     }
 
     /**
      * 是否空闲
      * */
     public AtomicBoolean isIdle() {
-        // TODO
+        eventEngine.log();
         return idle;
     }
 
@@ -53,7 +71,7 @@ public class WorkerProcessor extends AbstractProcessor {
      * 关闭工作线程
      * */
     public void shutdown() {
-
+        eventEngine.shutdown();
     }
 }
 
