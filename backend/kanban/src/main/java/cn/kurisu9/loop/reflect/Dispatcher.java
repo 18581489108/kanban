@@ -1,5 +1,7 @@
 package cn.kurisu9.loop.reflect;
 
+import cn.kurisu9.loop.logic.AbstractObject;
+import cn.kurisu9.loop.net.codec.NetPacket;
 import cn.kurisu9.loop.processor.AbstractProcessor;
 import cn.kurisu9.loop.processor.AbstractProcessorMessage;
 
@@ -18,4 +20,10 @@ public class Dispatcher {
         // TODO 分发消息
     }
 
+    /**
+     * 分发客户端消息
+     * */
+    public static void dispatchClientPacket(AbstractObject object, NetPacket packet) {
+
+    }
 }

@@ -2,6 +2,7 @@ package cn.kurisu9.loop.processor;
 
 import cn.kurisu9.loop.event.AbstractEvent;
 import cn.kurisu9.loop.event.EventEngine;
+import cn.kurisu9.loop.logic.AbstractContainerLogic;
 import cn.kurisu9.loop.util.ConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,11 @@ public class WorkerProcessor extends AbstractProcessor {
      * */
     private EventEngine eventEngine;
 
+    /**
+     * 应用层使用的容器逻辑对象
+     * */
+    private AbstractContainerLogic containerLogic;
+
     public WorkerProcessor() {
         setProcessorType(ProcessorTypeEnum.WORKER);
     }
@@ -47,6 +53,11 @@ public class WorkerProcessor extends AbstractProcessor {
      */
     @Override
     public boolean init() {
+
+        containerLogic = ConfigUtils.createContainerLogic();
+        containerLogic.setWorkerProcessor(this);
+
+
         eventEngine = new EventEngine(ConfigUtils.EVENT_THREAD_COUNT);
 
         return true;

@@ -1,6 +1,9 @@
 package cn.kurisu9.loop.util;
 
 import cn.kurisu9.loop.entity.NetConfig;
+import cn.kurisu9.loop.logic.AbstractContainerLogic;
+import cn.kurisu9.loop.logic.AbstractObject;
+import cn.kurisu9.loop.logic.ObjectTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,4 +126,40 @@ public class ConfigUtils {
         return result;
 
     }
+
+    //region 使用的对象信息
+
+    /**
+     * 容器对象的实际实现类
+     * */
+    private static final Class<?> CONTAINER_LOGIC_CLASS = null;
+
+    /**
+     * 创建容器对象
+     * */
+    public static AbstractContainerLogic createContainerLogic() {
+        try {
+            return ((AbstractContainerLogic) CONTAINER_LOGIC_CLASS.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private static final Class<?> ABSTRACT_OBJECT_CLASS = null;
+
+    /**
+     * 创建session挂载的对象
+     * */
+    public static AbstractObject createAbstractObject(ObjectTypeEnum type) {
+        try {
+            return ((AbstractObject) ABSTRACT_OBJECT_CLASS.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    //endregion
 }
