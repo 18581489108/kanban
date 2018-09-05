@@ -22,6 +22,16 @@ public enum SessionExceptionEnum {
     PACKET_EXCEPTION,
 
     /**
+     * 登录超时
+     * */
+    LOGIN_TIMEOUT,
+
+    /**
+     * 重复登录
+     * */
+    REPEAT_LOGIN,
+
+    /**
      * 主动与客户端断开连接
      * */
     ACTIVE_DISCONNECT,

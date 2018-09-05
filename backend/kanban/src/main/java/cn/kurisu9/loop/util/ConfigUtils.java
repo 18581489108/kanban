@@ -34,6 +34,13 @@ public class ConfigUtils {
     public static final int EVENT_THREAD_COUNT = 2;
 
     /**
+     * 登录耗时的时间限制，单位毫秒
+     *
+     * 5分钟
+     * */
+    public static final int LOGIN_ELAPSED_LIMIT_TIME = 300000;
+
+    /**
      * 环境变量名称（配置文件目录）
      */
     private static final String CONFIG_PATH = "config.path";

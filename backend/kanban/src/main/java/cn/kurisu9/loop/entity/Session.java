@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @description 连接的相关会话
  * @date 2018/9/1 17:00
  **/
-public class Session implements TickObject {
+public class Session {
     private static final Logger LOGGER = LoggerFactory.getLogger(Session.class);
 
     /**
@@ -52,6 +52,11 @@ public class Session implements TickObject {
      * 每个session对应的uuid
      * */
     private long uuid;
+
+    /**
+     * 登陆花费的时间
+     * */
+    private int loginElapsedTime;
 
     /**
      * 收到的网络包队列
@@ -164,13 +169,35 @@ public class Session implements TickObject {
     }
 
     /**
-     * tick
-     *
-     * @param intervalTime tick的间隔时间
-     */
-    @Override
-    public void tick(int intervalTime) {
+     * tick登录消息
+     * */
+    public void tickLogin(int intervalTime) {
+        handleLoginInput(intervalTime);
+    }
 
+    /**
+     * 处理登陆消息
+     * */
+    private void handleLoginInput(int intervalTime) {
+        loginElapsedTime += intervalTime;
+
+        // 登录超时
+        if (loginElapsedTime >= ConfigUtils.LOGIN_ELAPSED_LIMIT_TIME) {
+            sessionException = SessionExceptionEnum.LOGIN_TIMEOUT;
+            return;
+        }
+
+        NetPacket netPacket;
+        if (abstractObject == null
+            || (netPacket = popReceivedNetPacket()) == null) {
+            return;
+        }
+
+        int packetId = netPacket.getPacketId();
+
+        // TODO 检测是否是登录消息
+
+        LOGGER.debug("Message id:{} form {}, message is not login message", packetId, netPacket.getSrcId());
     }
 
     //region getter/setter
