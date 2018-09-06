@@ -19,6 +19,11 @@ public class ConfigUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUtils.class);
 
     /**
+     * 网络包的基础长度
+     * */
+    public static final int NET_PACKET_BASE_LEN = 14;
+
+    /**
      * 主逻辑线程的tick毫秒数为100
      * */
     public static final int MAIN_PROCESSOR_TICK_MS = 100;
@@ -39,6 +44,16 @@ public class ConfigUtils {
      * 5分钟
      * */
     public static final int LOGIN_ELAPSED_LIMIT_TIME = 300000;
+
+    /**
+     * 每次tick客户端输入的处理的个数
+     * */
+    public static final int CLIENT_INPUT_HANDLE_COUNT = 20;
+
+    /**
+     * 每次tick向客户端发送消息的个数
+     * */
+    public static final int CLIENT_OUTPUT_HANDLE_COUNT = 10;
 
     /**
      * 环境变量名称（配置文件目录）

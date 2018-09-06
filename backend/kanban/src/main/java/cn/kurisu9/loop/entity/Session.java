@@ -1,10 +1,10 @@
 package cn.kurisu9.loop.entity;
 
-import cn.kurisu9.loop.base.TickObject;
 import cn.kurisu9.loop.logic.AbstractObject;
 import cn.kurisu9.loop.logic.ObjectTypeEnum;
 import cn.kurisu9.loop.manager.SessionExceptionEnum;
 import cn.kurisu9.loop.net.codec.NetPacket;
+import cn.kurisu9.loop.reflect.Dispatcher;
 import cn.kurisu9.loop.util.ConfigUtils;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -115,7 +115,7 @@ public class Session {
     /**
      * 获取待发送列表中的第一个消息包
      * */
-    public NetPacket peekPeningSendNetPacket() {
+    public NetPacket peekPendingSendNetPacket() {
         return pendingSendNetPacketQueue.peek();
     }
 
@@ -173,7 +173,11 @@ public class Session {
      * */
     public void tickLogin(int intervalTime) {
         handleLoginInput(intervalTime);
+
+        handleOutput(intervalTime);
     }
+
+
 
     /**
      * 处理登陆消息
@@ -198,6 +202,74 @@ public class Session {
         // TODO 检测是否是登录消息
 
         LOGGER.debug("Message id:{} form {}, message is not login message", packetId, netPacket.getSrcId());
+    }
+
+    /**
+     * 处理输出消息
+     * */
+    private void handleOutput(int handleCount) {
+        if (abstractObject == null || channel == null) {
+            return;
+        }
+
+        boolean isFlush = false;
+        for (int i = 0; i < handleCount; i++) {
+            NetPacket netPacket = peekPendingSendNetPacket();
+            if (netPacket == null) {
+                break;
+            }
+
+            isFlush = true;
+            channel.write(netPacket);
+            popPeningSendNetPacket();
+        }
+
+        if (isFlush) {
+            channel.flush();
+        }
+    }
+
+    /**
+     * tick客户端发送的消息包
+     * */
+    public void tickClientInput(int intervalTime) {
+        handleClientInput(ConfigUtils.CLIENT_INPUT_HANDLE_COUNT);
+    }
+
+    /**
+     * 处理客户端发来的消息
+     * */
+    private void handleClientInput(int handleCount) {
+        if (abstractObject == null) {
+            return;
+        }
+
+        for (int i = 0; i < handleCount; i++) {
+            NetPacket netPacket = popReceivedNetPacket();
+            if (netPacket == null) {
+                break;
+            }
+
+            Dispatcher.dispatchClientPacket(abstractObject, netPacket);
+        }
+    }
+
+    /**
+     * tick逻辑
+     * */
+    public void tickLogic(int intervalTime) {
+        if (abstractObject == null) {
+            return;
+        }
+
+        abstractObject.tick(intervalTime);
+    }
+
+    /**
+     * tick向客户端发送消息
+     * */
+    public void tickClientOutput(int intervalTime) {
+        handleOutput(ConfigUtils.CLIENT_OUTPUT_HANDLE_COUNT);
     }
 
     //region getter/setter
