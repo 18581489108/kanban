@@ -59,9 +59,9 @@ public abstract class AbstractObject implements TickObject {
     public abstract boolean isLoginVerifyOk();
 
     /**
-     * 是否被销毁
+     * 是否可以被销毁
      * */
-    public abstract boolean isDestroyed();
+    public abstract boolean canBeDestroyed();
 
     /**
      * 由子类实现具体销毁

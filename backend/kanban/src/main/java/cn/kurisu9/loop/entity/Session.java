@@ -215,7 +215,7 @@ public class Session {
         boolean isFlush = false;
         for (int i = 0; i < handleCount; i++) {
             NetPacket netPacket = peekPendingSendNetPacket();
-            if (netPacket == null) {
+            if (netPacket == null || !channel.isWritable()) {
                 break;
             }
 
@@ -271,6 +271,80 @@ public class Session {
     public void tickClientOutput(int intervalTime) {
         handleOutput(ConfigUtils.CLIENT_OUTPUT_HANDLE_COUNT);
     }
+
+
+    /**
+     * 是否可以销毁
+     * */
+    public boolean canBeDestroyed() {
+        if (abstractObject == null) {
+            LOGGER.error("abstractObject is null, uuid:{}, so can destroy session", uuid);
+            return true;
+        }
+
+        return abstractObject.canBeDestroyed();
+    }
+
+    /**
+     * 断线重连
+     * */
+    public boolean resume(Session newSession) {
+        if (abstractObject == null) {
+            return false;
+        }
+
+        AbstractObject newObj = newSession.getAbstractObject();
+
+        boolean result = abstractObject.resume(newSession);
+        return clearOldSessionAndNewObj(result, newObj);
+    }
+
+    /**
+     * 重复登录
+     * */
+    public boolean repeatLogin(Session newSession) {
+        if (abstractObject == null) {
+            return false;
+        }
+
+        AbstractObject newObj = newSession.getAbstractObject();
+
+        boolean result = abstractObject.repeatLogin(newSession);
+        return clearOldSessionAndNewObj(result, newObj);
+    }
+
+    /**
+     * 在断线重连或者重复登录之后将旧的session清理掉
+     * 并且将新的AbstractObject也做清理
+     *
+     * @param result 断线重连或者重复登录的处理结果
+     * @param newObj 新的AbstractObject
+     */
+    private boolean clearOldSessionAndNewObj(boolean result, AbstractObject newObj) {
+        if (result) {
+            closeChannel();
+            clear();
+            newObj.setSession(null);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 是否登录验证成功
+     * */
+    public boolean isLoginVerifyOk() {
+        return abstractObject.isLoginVerifyOk();
+    }
+
+    /**
+     * 登录
+     * */
+    public void login() {
+        abstractObject.login();
+    }
+
 
     //region getter/setter
     public Channel getChannel() {
