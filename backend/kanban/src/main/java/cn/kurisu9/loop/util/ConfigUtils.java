@@ -38,6 +38,7 @@ public class ConfigUtils {
      * */
     public static final int EVENT_THREAD_COUNT = 2;
 
+    //region session对象使用的配置
     /**
      * 登录耗时的时间限制，单位毫秒
      *
@@ -54,6 +55,20 @@ public class ConfigUtils {
      * 每次tick向客户端发送消息的个数
      * */
     public static final int CLIENT_OUTPUT_HANDLE_COUNT = 10;
+    //endregion
+
+    //region SessionManager使用的配置
+    /**
+     * 每次tick处理的新连接的客户端session的处理个数
+     * */
+    public static final int NEW_CLIENT_SESSION_HANDLE_COUNT = 100;
+
+    /**
+     * 每次tick处理客户端session登录请求的处理个数
+     * */
+    public static final int LOGGING_IN_CLIENT_SESSION_HANDLE_COUNT = 100;
+    //endregion
+
 
     /**
      * 环境变量名称（配置文件目录）
