@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.concurrent.*;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 事件引擎
  * @date 2018/9/3 18:26
  **/

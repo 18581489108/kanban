@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 封装了在workerProcessor中的顶层逻辑抽象
  * @date 2018/9/4 10:35
  **/

@@ -3,7 +3,7 @@ package cn.kurisu9.loop.event;
 import java.util.concurrent.Callable;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 事件的抽象类
  * @date 2018/9/3 18:16
  **/

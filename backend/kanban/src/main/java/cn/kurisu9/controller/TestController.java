@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 测试使用的controller
  * @date 2018/9/3 17:28
  **/

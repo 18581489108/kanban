@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 抽象对象，抽象了用于挂载session的对象
  * @date 2018/9/4 10:23
  **/

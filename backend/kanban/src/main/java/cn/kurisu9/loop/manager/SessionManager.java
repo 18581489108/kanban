@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description session管理
  * @date 2018/9/9 18:52
  **/

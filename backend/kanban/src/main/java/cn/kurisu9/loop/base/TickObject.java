@@ -1,7 +1,7 @@
 package cn.kurisu9.loop.base;
 
 /**
- * @author zhaoxin_m
+ * @author kurisu9
  * @description 可被tick的对象
  * @date 2018/9/3 19:08
  **/
