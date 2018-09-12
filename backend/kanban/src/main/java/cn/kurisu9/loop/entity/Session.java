@@ -2,6 +2,7 @@ package cn.kurisu9.loop.entity;
 
 import cn.kurisu9.loop.logic.AbstractObject;
 import cn.kurisu9.loop.logic.ObjectTypeEnum;
+import cn.kurisu9.loop.logic.PacketFilter;
 import cn.kurisu9.loop.manager.SessionExceptionEnum;
 import cn.kurisu9.loop.net.codec.NetPacket;
 import cn.kurisu9.loop.reflect.Dispatcher;
@@ -199,7 +200,11 @@ public class Session {
 
         int packetId = netPacket.getPacketId();
 
-        // TODO 检测是否是登录消息
+        // 检测是否是登录消息
+        if (PacketFilter.getInstance().isLoginPcket(packetId)) {
+            Dispatcher.dispatchClientPacket(abstractObject, netPacket);
+            return;
+        }
 
         LOGGER.debug("Message id:{} form {}, message is not login message", packetId, netPacket.getSrcId());
     }

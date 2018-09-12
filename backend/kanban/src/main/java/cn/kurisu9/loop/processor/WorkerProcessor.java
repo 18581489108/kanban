@@ -3,6 +3,7 @@ package cn.kurisu9.loop.processor;
 import cn.kurisu9.loop.event.AbstractEvent;
 import cn.kurisu9.loop.event.EventEngine;
 import cn.kurisu9.loop.logic.AbstractContainerLogic;
+import cn.kurisu9.loop.manager.SessionManager;
 import cn.kurisu9.loop.util.ConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,11 @@ public class WorkerProcessor extends AbstractProcessor {
      * */
     private AbstractContainerLogic containerLogic;
 
+    /**
+     * session管理器
+     * */
+    private SessionManager sessionManager = new SessionManager();
+
     public WorkerProcessor() {
         setProcessorType(ProcessorTypeEnum.WORKER);
     }
@@ -44,6 +50,10 @@ public class WorkerProcessor extends AbstractProcessor {
     @Override
     public void tick(int intervalTime) {
         eventEngine.tick(intervalTime);
+
+        containerLogic.tick(intervalTime);
+
+        sessionManager.tick(intervalTime);
 
         idle.set(eventEngine.idle());
     }
@@ -59,6 +69,8 @@ public class WorkerProcessor extends AbstractProcessor {
 
 
         eventEngine = new EventEngine(ConfigUtils.EVENT_THREAD_COUNT);
+
+        sessionManager.setContainerLogic(containerLogic);
 
         return true;
     }

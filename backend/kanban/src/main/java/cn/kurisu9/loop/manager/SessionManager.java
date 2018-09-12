@@ -4,8 +4,10 @@ import cn.kurisu9.loop.base.TickObject;
 import cn.kurisu9.loop.entity.Session;
 import cn.kurisu9.loop.entity.SessionStatusEnum;
 import cn.kurisu9.loop.logic.AbstractContainerLogic;
+import cn.kurisu9.loop.logic.AbstractObject;
 import cn.kurisu9.loop.logic.ObjectTypeEnum;
 import cn.kurisu9.loop.util.ConfigUtils;
+import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author kurisu9
@@ -30,7 +33,7 @@ public class SessionManager implements TickObject {
     /**
      * 新连接上来的客户端session
      * */
-    private LinkedList<Session> newClientSessionList = new LinkedList<>();
+    private ConcurrentLinkedQueue<Session> newClientSessionList = new ConcurrentLinkedQueue<>();
 
     /**
      * 正在登录的session
@@ -68,6 +71,10 @@ public class SessionManager implements TickObject {
         tickLoggingInClientSession(intervalTime);
 
         tickClientSession(intervalTime);
+
+        tickExceptionClientSession(intervalTime);
+
+        tickDestroyedClientSession(intervalTime);
     }
 
     private void tickNewClientSession(int intervalTime) {
@@ -75,13 +82,13 @@ public class SessionManager implements TickObject {
             return;
         }
 
-        Iterator<Session> iterator = newClientSessionList.iterator();
         int count = 0;
-        while (iterator.hasNext() && count < ConfigUtils.NEW_CLIENT_SESSION_HANDLE_COUNT) {
-            Session session = iterator.next();
+        while (count < ConfigUtils.NEW_CLIENT_SESSION_HANDLE_COUNT) {
+            Session session = newClientSessionList.poll();
+            if (session == null) {
+                return;
+            }
             count++;
-
-            iterator.remove();
 
             LOGGER.info("new client session add to logging in list, remote address:{}", session.getChannel().remoteAddress());
 
@@ -209,6 +216,51 @@ public class SessionManager implements TickObject {
         }
     }
 
+    private void tickExceptionClientSession(int intervalTime) {
+        if (exceptionClientSessionMap.isEmpty()) {
+            return;
+        }
+
+        Iterator<Map.Entry<Long, Session>> iterator = exceptionClientSessionMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Long, Session> entry = iterator.next();
+            Session session = entry.getValue();
+
+            session.exception();
+            iterator.remove();
+            destroyClientSessionMap.put(entry.getKey(), session);
+        }
+    }
+
+    private void tickDestroyedClientSession(int intervalTime) {
+        if (destroyClientSessionMap.isEmpty()) {
+            return;
+        }
+
+        Iterator<Map.Entry<Long, Session>> iterator = destroyClientSessionMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Long, Session> entry = iterator.next();
+            Session session = entry.getValue();
+
+            if (session.canBeDestroyed()) {
+                AbstractObject abstractObject = session.getAbstractObject();
+                if (abstractObject != null) {
+                    containerLogic.leave(abstractObject);
+                }
+
+                // 在切断连接前，处理未发送的消息
+                Channel channel = session.getChannel();
+                if (channel != null && channel.isWritable()) {
+                    session.tickClientOutput(intervalTime);
+                }
+
+                session.closeChannel();
+                session.destroy();
+                iterator.remove();
+            }
+        }
+    }
+
     private Session getSessionFromClientSessions(long uuid) {
         return clientSessionMap.get(uuid);
     }
@@ -219,6 +271,17 @@ public class SessionManager implements TickObject {
 
     private Session getSessionFromClientDestroySessions(long uuid) {
         return destroyClientSessionMap.get(uuid);
+    }
+
+    public void addNewClientSession(Session session) {
+        newClientSessionList.add(session);
+    }
+
+    /**
+     * 正常连接的客户端个数
+     * */
+    public int clientCount() {
+        return clientSessionMap.size();
     }
 
     //region getter/setter
