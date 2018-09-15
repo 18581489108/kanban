@@ -87,19 +87,29 @@ public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<Bin
             return;
         }
 
-        /*
         ByteBuf byteBuf = msg.content();
         int bufLen = byteBuf.readableBytes();
 
-        byteBuf.markReaderIndex();
+        if (bufLen < 6) {
+            return;
+        }
 
-        byte[] body = new byte[bufLen];
-        byteBuf.readBytes(body);
+        short packetID = byteBuf.readShort();
+        int packetLength = byteBuf.readInt();
 
-        System.out.println(new String(body));
-        */
+        if (packetID < 0 || packetLength <= 0) {
+            LOGGER.warn("packet id {} or packet length {} invalid", packetID, packetLength);
+            throw new IllegalStateException("Packet format invalid.");
+        }
+
         NetPacket netPacket = new NetPacket();
-        // TODO 构建消息包
+        netPacket.setPacketId(packetID);
+        netPacket.setPacketLen(packetLength);
+
+        byte[] body = new byte[packetLength];
+        byteBuf.readBytes(body);
+        netPacket.setBody(body);
+
         session.pushReceivedNetPacket(netPacket);
     }
 }

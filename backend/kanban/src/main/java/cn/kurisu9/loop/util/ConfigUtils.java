@@ -69,6 +69,20 @@ public class ConfigUtils {
     public static final int LOGGING_IN_CLIENT_SESSION_HANDLE_COUNT = 100;
     //endregion
 
+    //region Dispatcher使用的配置
+
+    /**
+     * 最大的消息id 不包含这个值
+     * */
+    public static final int MAX_MESSAGE_ID = 9999;
+
+    /**
+     * 最大的网络消息包id 不包含这个值
+     * */
+    public static final int MAX_PACKET_ID = 9999;
+
+    //endregion
+
 
     /**
      * 环境变量名称（配置文件目录）

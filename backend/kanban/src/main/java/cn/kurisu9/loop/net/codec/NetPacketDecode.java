@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author kurisu9
- * @description TODO
+ * @description 网络消息包的解析器
  * @date 2018/9/1 20:49
  **/
 public class NetPacketDecode extends ByteToMessageDecoder {

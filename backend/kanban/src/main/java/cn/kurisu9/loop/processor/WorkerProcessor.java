@@ -96,6 +96,18 @@ public class WorkerProcessor extends AbstractProcessor {
     public void shutdown() {
         eventEngine.shutdown();
     }
+
+    public EventEngine getEventEngine() {
+        return eventEngine;
+    }
+
+    public AbstractContainerLogic getContainerLogic() {
+        return containerLogic;
+    }
+
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
 }
 
 

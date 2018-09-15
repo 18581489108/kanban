@@ -1,6 +1,7 @@
 package cn.kurisu9.loop.bootstrap;
 
 import cn.kurisu9.loop.processor.*;
+import cn.kurisu9.loop.reflect.ModuleLoader;
 import cn.kurisu9.loop.util.ConfigUtils;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
@@ -34,6 +35,10 @@ public class ServerBoot {
                 LOGGER.error("loadNettyConfigFromFile failed");
                 return;
             }
+
+            // 加载消息反射
+            ModuleLoader.getInstance().registerMessage();
+            ModuleLoader.getInstance().registerPacket();
 
             MainProcessor mainProcessor = new MainProcessor();
             ProcessorPool.getInstance().run(mainProcessor, ConfigUtils.MAIN_PROCESSOR_TICK_MS);

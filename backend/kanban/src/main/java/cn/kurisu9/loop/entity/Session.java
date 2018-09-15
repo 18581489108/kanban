@@ -99,6 +99,13 @@ public class Session {
     /**
      * 将packet添加到待发送列表
      * */
+    public void sendNetPacket(short packetId) {
+        // TODO 引入protoBuf
+    }
+
+    /**
+     * 将packet添加到待发送列表
+     * */
     public void sendNetPacket(NetPacket packet) {
         if (packet != null) {
             pendingSendNetPacketQueue.add(packet);
