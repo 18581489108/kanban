@@ -11,4 +11,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PacketHandler {
+    /**
+     * 网络包的 packet id
+     * */
+    short value() default -1;
 }

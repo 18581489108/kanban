@@ -12,4 +12,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MessageHandler {
+    /**
+     * 线程间消息的 message id
+     * */
+    short value() default -1;
 }
