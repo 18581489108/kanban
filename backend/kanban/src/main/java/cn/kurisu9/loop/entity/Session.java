@@ -7,6 +7,7 @@ import cn.kurisu9.loop.manager.SessionExceptionEnum;
 import cn.kurisu9.loop.net.codec.NetPacket;
 import cn.kurisu9.loop.reflect.Dispatcher;
 import cn.kurisu9.loop.util.ConfigUtils;
+import com.google.protobuf.Message;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -99,14 +100,29 @@ public class Session {
     /**
      * 将packet添加到待发送列表
      * */
-    public void sendNetPacket(short packetId) {
-        // TODO 引入protoBuf
+    public void sendNetPacket(short packetId, int dstId, int srcId, Message message) {
+        if (!valid) {
+            return;
+        }
+
+        NetPacket netPacket = new NetPacket();
+        netPacket.setDstId(dstId);
+        netPacket.setSrcId(srcId);
+        netPacket.setPacketId(packetId);
+
+        byte[] body = message.toByteArray();
+        netPacket.setPacketLen(body.length);
+
+        netPacket.setBody(body);
+
+        LOGGER.debug("push send list, packet id:{}, content:\n{}", packetId, message.toString());
+        sendNetPacket(netPacket);
     }
 
     /**
      * 将packet添加到待发送列表
      * */
-    public void sendNetPacket(NetPacket packet) {
+    private void sendNetPacket(NetPacket packet) {
         if (packet != null) {
             pendingSendNetPacketQueue.add(packet);
         }

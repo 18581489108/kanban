@@ -3,6 +3,8 @@ package cn.kurisu9.loop.logic;
 import cn.kurisu9.loop.base.TickObject;
 import cn.kurisu9.loop.entity.Session;
 import cn.kurisu9.loop.manager.SessionExceptionEnum;
+import cn.kurisu9.loop.net.codec.NetPacket;
+import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,6 +130,17 @@ public abstract class AbstractObject implements TickObject {
      * */
     public long getUuid() {
         return session.getUuid();
+    }
+
+    /**
+     * 发送客户端消息
+     * @param id        消息包id
+     * @param srcId     发送源id
+     * @param dstId     目标id
+     * @param message   protoBuf消息
+     */
+    public void sendClientMessage(short id, int srcId, int dstId, Message message) {
+        session.sendNetPacket(id, srcId, dstId, message);
     }
 
     //region getter/setter
