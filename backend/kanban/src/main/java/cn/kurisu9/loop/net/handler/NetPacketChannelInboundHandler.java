@@ -7,10 +7,8 @@ import cn.kurisu9.loop.net.codec.NetPacket;
 import cn.kurisu9.loop.processor.AbstractProcessor;
 import cn.kurisu9.loop.processor.ProcessorPool;
 import cn.kurisu9.loop.processor.ProcessorTypeEnum;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by kurisu9 on 2018/9/1.
  */
-public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<BinaryWebSocketFrame> {
+public class NetPacketChannelInboundHandler extends SimpleChannelInboundHandler<NetPacket> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BinaryWebSocketFrameHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetPacketChannelInboundHandler.class);
 
     private Session session = null;
 
@@ -81,35 +79,12 @@ public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<Bin
     }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, BinaryWebSocketFrame msg) throws Exception {
+    protected void messageReceived(ChannelHandlerContext ctx, NetPacket msg) throws Exception {
         if (session == null) {
             LOGGER.warn("session is null, ctx {}, remote address:{}", ctx.name(), ctx.channel().remoteAddress().toString());
             return;
         }
 
-        ByteBuf byteBuf = msg.content();
-        int bufLen = byteBuf.readableBytes();
-
-        if (bufLen < 6) {
-            return;
-        }
-
-        short packetID = byteBuf.readShort();
-        int packetLength = byteBuf.readInt();
-
-        if (packetID < 0 || packetLength <= 0) {
-            LOGGER.warn("packet id {} or packet length {} invalid", packetID, packetLength);
-            throw new IllegalStateException("Packet format invalid.");
-        }
-
-        NetPacket netPacket = new NetPacket();
-        netPacket.setPacketId(packetID);
-        netPacket.setPacketLen(packetLength);
-
-        byte[] body = new byte[packetLength];
-        byteBuf.readBytes(body);
-        netPacket.setBody(body);
-
-        session.pushReceivedNetPacket(netPacket);
+        session.pushReceivedNetPacket(msg);
     }
 }

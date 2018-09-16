@@ -4,7 +4,7 @@ import cn.kurisu9.loop.bootstrap.ServerStatusEnum;
 import cn.kurisu9.loop.entity.NetConfig;
 import cn.kurisu9.loop.net.NettyServer;
 import cn.kurisu9.loop.net.NettyStatusEnum;
-import cn.kurisu9.loop.net.handler.WebSocketServerInitHandler;
+import cn.kurisu9.loop.net.handler.WebSocketServerInitializer;
 import cn.kurisu9.loop.util.ConfigUtils;
 import io.netty.channel.ChannelFuture;
 import org.slf4j.Logger;
@@ -56,7 +56,7 @@ public class MainProcessor extends AbstractProcessor {
     public boolean init() {
         // 启动网络接收层的netty
         NetConfig netConfig = ConfigUtils.getNetConfig();
-        nettyServer = new NettyServer(netConfig.getHost(), netConfig.getPort(), new WebSocketServerInitHandler());
+        nettyServer = new NettyServer(netConfig.getHost(), netConfig.getPort(), new WebSocketServerInitializer());
         nettyServer.boot();
 
 

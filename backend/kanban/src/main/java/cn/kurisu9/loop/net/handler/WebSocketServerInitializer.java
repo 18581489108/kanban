@@ -1,6 +1,6 @@
 package cn.kurisu9.loop.net.handler;
 
-import cn.kurisu9.loop.net.codec.NetPacketDecode;
+import cn.kurisu9.loop.net.codec.WebSocketProtoCodec;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -12,7 +12,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 /**
  * Created by kurisu9 on 2018/9/1.
  */
-public class WebSocketServerInitHandler extends ChannelInitializer<SocketChannel> {
+public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
@@ -32,7 +32,8 @@ public class WebSocketServerInitHandler extends ChannelInitializer<SocketChannel
         //pipeline.addLast(new NetPacketDecode());
         // websocket定义了传递数据的6种frame类型
         //pipeline.addLast(new TextWebSocketFrameHandler());
-        pipeline.addLast(new BinaryWebSocketFrameHandler());
+        pipeline.addLast(new WebSocketProtoCodec());
+        pipeline.addLast(new NetPacketChannelInboundHandler());
 
     }
 }
