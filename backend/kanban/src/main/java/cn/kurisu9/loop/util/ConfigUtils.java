@@ -183,14 +183,18 @@ public class ConfigUtils {
     /**
      * 容器对象的实际实现类
      * */
-    private static final Class<?> CONTAINER_LOGIC_CLASS = null;
+    private static Class<? extends AbstractContainerLogic> containerLogicClass = null;
+
+    public static void setContainerLogicClass(Class<? extends AbstractContainerLogic> containerLogicClass) {
+        ConfigUtils.containerLogicClass = containerLogicClass;
+    }
 
     /**
      * 创建容器对象
      * */
     public static AbstractContainerLogic createContainerLogic() {
         try {
-            return ((AbstractContainerLogic) CONTAINER_LOGIC_CLASS.newInstance());
+            return ((AbstractContainerLogic) containerLogicClass.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -198,14 +202,18 @@ public class ConfigUtils {
         return null;
     }
 
-    private static final Class<?> ABSTRACT_OBJECT_CLASS = null;
+    private static Class<? extends AbstractObject> abstractObjectClass = null;
+
+    public static void setAbstractObjectClass(Class<? extends AbstractObject> abstractObjectClass) {
+        ConfigUtils.abstractObjectClass = abstractObjectClass;
+    }
 
     /**
      * 创建session挂载的对象
      * */
     public static AbstractObject createAbstractObject(ObjectTypeEnum type) {
         try {
-            return ((AbstractObject) ABSTRACT_OBJECT_CLASS.newInstance());
+            return ((AbstractObject) abstractObjectClass.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
