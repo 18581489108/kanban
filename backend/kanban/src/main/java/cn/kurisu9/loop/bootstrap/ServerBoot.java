@@ -28,7 +28,7 @@ public class ServerBoot {
     /**
      * 启动服务器
      * */
-    public static void boot() {
+    public static void boot(ExtraBoot extraBoot) {
         {
             boolean result = ConfigUtils.loadNettyConfigFromFile();
             if (!result) {
@@ -39,6 +39,11 @@ public class ServerBoot {
             // 加载消息反射
             ModuleLoader.getInstance().registerMessage();
             ModuleLoader.getInstance().registerPacket();
+
+            // 额外的启动
+            if (extraBoot != null) {
+                extraBoot.boot();
+            }
 
             MainProcessor mainProcessor = new MainProcessor();
             ProcessorPool.getInstance().run(mainProcessor, ConfigUtils.MAIN_PROCESSOR_TICK_MS);
