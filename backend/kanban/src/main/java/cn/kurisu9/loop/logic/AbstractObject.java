@@ -19,7 +19,7 @@ public abstract class AbstractObject implements TickObject {
     /**
      * 连接产生的会话对象
      * */
-    private Session session;
+    protected Session session;
 
     /**
      * 是否已经进入过容器逻辑对象
