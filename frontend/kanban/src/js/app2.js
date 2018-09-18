@@ -22,7 +22,7 @@ function sendMsg() {
     msg.id = "1";
     msg.content = "test";
     msg.sender = "web";
-    msg.tiem = new Date().toDateString();
+    msg.time = new Date().toDateString();
     
     webSocket.send(msg.toArrayBuffer());
 }
