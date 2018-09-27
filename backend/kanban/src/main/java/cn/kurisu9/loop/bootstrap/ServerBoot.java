@@ -28,7 +28,7 @@ public class ServerBoot {
     /**
      * 启动服务器
      * */
-    public static void boot(ExtraBoot extraBoot) {
+    public static void boot(ExtraBoot extraBoot) throws Exception {
         {
             boolean result = ConfigUtils.loadNettyConfigFromFile();
             if (!result) {

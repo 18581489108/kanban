@@ -25,7 +25,7 @@ public class ModuleLoader {
     /**
      * 注册网络包处理
      * */
-    public void registerPacket() {
+    public void registerPacket() throws NoSuchMethodException {
         registerModule(PacketModule.class, PacketHandler.class,
                 (Object module, Method method) -> {
                     PacketHandler handler = method.getAnnotation(PacketHandler.class);
@@ -37,7 +37,7 @@ public class ModuleLoader {
     /**
      * 注册线程间消息处理
      * */
-    public void registerMessage() {
+    public void registerMessage() throws NoSuchMethodException {
         registerModule(MessageModule.class, MessageHandler.class,
                 (Object module, Method method) -> {
                     MessageHandler handler = method.getAnnotation(MessageHandler.class);
@@ -52,7 +52,9 @@ public class ModuleLoader {
      * @param handlerClass  扫描的处理器注解
      * @param register      注册方式
      */
-    private void registerModule(Class<? extends Annotation> moduleClass, Class<? extends Annotation> handlerClass, HandlerRegister register) {
+    private void registerModule(Class<? extends Annotation> moduleClass, Class<? extends Annotation> handlerClass, HandlerRegister register)
+            throws NoSuchMethodException {
+
         Map<String, Object> modules = SpringUtils.getApplicationContext().getBeansWithAnnotation(moduleClass);
         for (Object obj : modules.values()) {
             Method[] methods = obj.getClass().getMethods();
@@ -71,7 +73,7 @@ public class ModuleLoader {
          * @param module    模块
          * @param method    模块下的处理方法
          */
-        void register(Object module, Method method);
+        void register(Object module, Method method) throws NoSuchMethodException;
     }
 }
 

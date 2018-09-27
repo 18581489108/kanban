@@ -11,7 +11,7 @@ import cn.kurisu9.loop.reflect.annotation.PacketModule;
 @PacketModule
 public class ExamplePacketModule {
 
-    @PacketHandler
+    @PacketHandler(PacketId.LoginRequest)
     public void handleLoginRequest(ClientObject client, ExampleMessage.LoginRequest packet) {
         long uuid = packet.getUuid();
 
