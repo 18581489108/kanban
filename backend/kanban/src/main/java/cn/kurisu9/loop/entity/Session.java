@@ -132,7 +132,7 @@ public class Session {
     /**
      * 弹出待发送列表中的第一个消息包
      * */
-    public NetPacket popPeningSendNetPacket() {
+    public NetPacket popPendingSendNetPacket() {
         return pendingSendNetPacketQueue.poll();
     }
 
@@ -249,7 +249,7 @@ public class Session {
 
             isFlush = true;
             channel.write(netPacket);
-            popPeningSendNetPacket();
+            popPendingSendNetPacket();
         }
 
         if (isFlush) {

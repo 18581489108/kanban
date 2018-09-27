@@ -44,6 +44,7 @@ public class WebSocketProtoCodec extends MessageToMessageCodec<WebSocketFrame, N
         ByteBuf byteBuf = msg.content();
         int bufLen = byteBuf.readableBytes();
 
+        // 消息id 2byte 消息长度 4byte 消息 n byte
         if (bufLen < 6) {
             return;
         }
@@ -63,6 +64,8 @@ public class WebSocketProtoCodec extends MessageToMessageCodec<WebSocketFrame, N
         byte[] body = new byte[packetLength];
         byteBuf.readBytes(body);
         netPacket.setBody(body);
+
+        out.add(netPacket);
     }
 }
 
