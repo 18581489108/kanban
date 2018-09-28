@@ -20,9 +20,9 @@ public class PacketId {
     static {
         packetMap = new HashMap<>();
 
-        packetMap.put(ExampleMessage.LoginRequest.class, LoginRequest);
-        packetMap.put(ExampleMessage.LoginResponse.class, LoginResponse);
-        packetMap.put(ExampleMessage.Message.class, Message);
+        packetMap.put(Example.LoginRequest.class, LoginRequest);
+        packetMap.put(Example.LoginResponse.class, LoginResponse);
+        packetMap.put(Example.Message.class, Message);
     }
 
     public static short getPacketId(Class<?> clazz) {

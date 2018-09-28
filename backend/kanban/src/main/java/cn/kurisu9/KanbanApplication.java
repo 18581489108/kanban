@@ -20,5 +20,7 @@ public class KanbanApplication {
             ConfigUtils.setAbstractObjectClass(ClientObject.class);
             ConfigUtils.setContainerLogicClass(ExampleContainerLogic.class);
 		});
+
+
     }
 }

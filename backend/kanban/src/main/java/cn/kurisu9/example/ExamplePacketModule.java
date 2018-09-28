@@ -12,7 +12,7 @@ import cn.kurisu9.loop.reflect.annotation.PacketModule;
 public class ExamplePacketModule {
 
     @PacketHandler(PacketId.LoginRequest)
-    public void handleLoginRequest(ClientObject client, ExampleMessage.LoginRequest packet) {
+    public void handleLoginRequest(ClientObject client, Example.LoginRequest packet) {
         long uuid = packet.getUuid();
 
         if (uuid != 9) {
@@ -21,7 +21,7 @@ public class ExamplePacketModule {
 
         client.setLoginVerifyOk(true);
 
-        ExampleMessage.LoginResponse.Builder builder = ExampleMessage.LoginResponse.newBuilder();
+        Example.LoginResponse.Builder builder = Example.LoginResponse.newBuilder();
         builder.setResult(true);
         client.senClientPacket(builder.build());
 

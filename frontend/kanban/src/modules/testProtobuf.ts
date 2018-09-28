@@ -9,12 +9,23 @@ export class WebSocketClient {
 
         this.webSocket.onopen = (evt: any) => {
             console.log("open");
-            let loginRequest = example.LoginRequest.create({uuid: -9});
+            let loginRequest = example.LoginRequest.create({uuid: 9});
             this.sendMessage(1001, example.LoginRequest.encode(loginRequest).finish());
         };
 
         this.webSocket.onmessage = (msg: any) => {
-            console.log(msg);
+            let arrayBuf: ArrayBuffer = msg.data as ArrayBuffer;
+            let dataView: DataView = new DataView(arrayBuf);
+            
+            let packetId: number = dataView.getInt16(0);
+            console.log("packetId: " + packetId);
+            let packetLen: number = dataView.getInt32(2);
+            console.log("packetLen: " + packetLen);
+            let message : Uint8Array = new Uint8Array(arrayBuf, 6, packetLen);
+            console.log(message);
+
+            let loginResponse: example.ILoginResponse = example.LoginResponse.decode(message);
+            console.log(loginResponse);
         };
     }
 
