@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "Test1.proto";
+
+package example;
+option java_package = "cn.kurisu9.example";
+
+message TestMessage {
+    Message msg = 1;
+}
+
+message Hello {
+    int32 content = 1;
+}
+  

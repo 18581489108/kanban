@@ -1,0 +1,17 @@
+
+¦
+Test1.protoexample""
+LoginRequest
+uuid (Ruuid"'
+LoginResponse
+result (Rresult"#
+Message
+content (	RcontentB
+cn.kurisu9.examplebproto3
+—
+Test2.protoexampleTest1.proto"1
+TestMessage"
+msg (2.example.MessageRmsg"!
+Hello
+content (RcontentB
+cn.kurisu9.examplebproto3

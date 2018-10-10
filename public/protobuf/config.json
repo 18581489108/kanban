@@ -1,0 +1,50 @@
+{
+
+  "protocFile": "./tools/protoc3.5.1.exe",
+
+  "pbjsFile": "cmd /c pbjs",
+
+  "pbtsFile": "cmd /c pbts",
+
+  "templateDir": "./templates",
+
+  "tempRootDir": "./build",
+
+  "descOutPath": "desc/global.desc",
+
+  "protoConfig": {
+    "srcDir": "./src/",
+    "includeFiles": ["Test1.proto", "Test2.proto"],
+    "excludedFiles": [],
+    "idFileConfigs": [
+      {
+        "targetFile": "Test1.proto",
+        "initId": 1001
+      },
+      {
+        "targetFile": "Test2.proto",
+        "initId": 2001
+      }
+    ]
+  },
+
+  "outConfigs": [
+    {
+      "type": "java",
+      "tempDir": "java",
+      "finalDir": "../../backend/kanban/src/main/java/",
+      "idFileFlag": true,
+      "idFilePath": "cn/kurisu9/example/PackId.java",
+      "idFileTemplate": "JavaPacketId.ftl"
+    },
+    {
+      "type": "typescript",
+      "tempDir": "ts",
+      "finalDir": "../../frontend/kanban/src/message",
+      "idFileFlag": true,
+      "idFilePath": "packId.ts",
+      "idFileTemplate": "TypeScriptPacketId.ftl"
+    }
+  ]
+
+}
